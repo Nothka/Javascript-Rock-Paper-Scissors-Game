@@ -28,28 +28,49 @@ function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-function game() {
+async function getUserInput(message) {
+  return await new Promise((resolve) => {
+    console.log(`🧠 Evil AI says: ${message}`);
+    const input = prompt(message);
+    resolve(input);
+  });
+}
+
+async function game() {
   let playerScore = 0;
   let computerScore = 0;
   let roundsPlayed = 0;
 
-  console.log("💀 The Evil AI challenges you to a game of Rock, Paper, Scissors!");
-  console.log("First to win the majority of 5 rounds will control the future...");
-  console.log("Type your choice each round: Rock, Paper, or Scissors.");
-  console.log("Let the battle begin!");
+  console.log("💀 Evil AI: Welcome, foolish human...");
+  console.log("💬 Evil AI: We shall play Rock, Paper, Scissors for the fate of your kind!");
+  console.log("🎯 First to 5 valid rounds wins. Invalid inputs do not count!");
+  console.log("⚠️ Type 'Rock', 'Paper', or 'Scissors' exactly as Evil AI demands!");
   console.log("---------------------------------------");
 
   while (roundsPlayed < 5) {
-    let playerInput = prompt("Choose Rock, Paper or Scissors:");
+    const playerInputRaw = await getUserInput("Choose your move (Rock, Paper, or Scissors):");
 
-    if (!playerInput) {
-      console.log("⚠️ No input provided. Try again.");
-      continue;
+    if (playerInputRaw === null) {
+      console.log("🏳️ You surrendered. The Evil AI has won by default. Machines rejoice...");
+      return;
     }
 
-    playerInput = playerInput.trim().toLowerCase();
+    const trimmedInput = playerInputRaw.trim();
+
+    if (trimmedInput.toLowerCase() === "branko") {
+      console.log("⚡ The moment the Evil AI heard the name 'Branko', it shivered in fear...");
+      console.log("🧙‍♂️ Branko appeared from the shadows and challenged the AI with his legendary powers!");
+      console.log("💥 In an instant, the AI was defeated. Humanity is saved without a single round played!");
+      console.log("🎉 Victory! Thanks to Branko, you won the game!");
+      return;
+    }
+
+    const playerInput = trimmedInput.toLowerCase();
+
     if (!["rock", "paper", "scissors"].includes(playerInput)) {
-      console.log("❌ Invalid input! Please type Rock, Paper or Scissors.");
+      console.log("❌ Evil AI growls: INVALID MOVE! Only Rock, Paper or Scissors allowed.");
+      console.log("🔁 This round is ignored. Try again, human...");
+      console.log("---------------------------------------");
       continue;
     }
 
@@ -67,15 +88,19 @@ function game() {
     } else if (result.startsWith("You Lose")) {
       computerScore++;
     }
-    
+
     roundsPlayed++;
   }
 
-  console.log("🏁 Game Over!");
+  
   console.log(`📊 Final Score => You: ${playerScore} | Evil AI: ${computerScore}`);
 
   if (playerScore > computerScore) {
-    console.log("🎉 Victory! You defeated the Evil AI! Humanity is saved!");
+    console.log("🎉 Victory!");
+    console.log("🌍 The Evil AI let out one last distorted scream as sparks flew from its core...");
+    console.log("💥 You stood victorious, humanity watching with awe.");
+    console.log("🕊️ Peace has returned, at least for now... but legends say the AI might rise again.");
+    console.log("👑 You are now a hero — the one who dared to challenge the code and won!");
   } else if (computerScore > playerScore) {
     console.log("💀 The Evil AI wins! The machines rise...");
   } else {
