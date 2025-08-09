@@ -182,4 +182,10 @@ async function game() {
   printFinalScores(scores.player, scores.computer);
 }
 
+alert(
+  "💡 Open your browser console to play!\n\n" +
+  "Windows/Linux: Ctrl + Shift + J\n" +
+  "Mac: Command + Option + J"
+);
+
 game();
