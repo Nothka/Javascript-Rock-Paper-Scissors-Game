@@ -12,19 +12,22 @@ function playRound(playerSelection, computerSelection) {
     return "It's a tie!";
   }
 
-  if (
-    (player === "rock" && computer === "scissors") ||
-    (player === "paper" && computer === "rock") ||
-    (player === "scissors" && computer === "paper")
-  ) {
-    return `You Win! ${capitalize(player)} beats ${capitalize(computer)}`;
-  } else {
-    return `You Lose! ${capitalize(computer)} beats ${capitalize(player)}`;
-  }
-}
+  const playerBeatsComputer =
+    (playerMove === "rock" && computerMove === "scissors") ||
+    (playerMove === "paper" && computerMove === "rock") ||
+    (playerMove === "scissors" && computerMove === "paper");
 
-function capitalize(word) {
-  return word.charAt(0).toUpperCase() + word.slice(1);
+  if (playerBeatsComputer) {
+    return {
+      status: "win",
+      text: `You Win! ${capFirst(playerMove)} beats ${capFirst(computerMove)}`,
+    };
+  }
+
+  return {
+    status: "lose",
+    text: `You Lose! ${capFirst(computerMove)} beats ${capFirst(playerMove)}`,
+  };
 }
 
 async function getUserInput(message) {
@@ -48,7 +51,9 @@ async function game() {
   let roundsPlayed = 0;
 
   console.log("💀 Evil AI: Welcome, foolish human...");
-  console.log("💬 Evil AI: We shall play Rock, Paper, Scissors for the fate of your kind!");
+  console.log(
+    "💬 Evil AI: We shall play Rock, Paper, Scissors for the fate of your kind!"
+  );
   console.log("🎯 First to 5 valid rounds wins. Invalid inputs do not count!");
   console.log("⚠️ Type 'Rock', 'Paper', or 'Scissors' exactly as Evil AI demands!");
   console.log("---------------------------------------");
@@ -111,15 +116,60 @@ async function game() {
 
   if (playerScore > computerScore) {
     console.log("🎉 Victory!");
-    console.log("🌍 The Evil AI let out one last distorted scream as sparks flew from its core...");
+    console.log(
+      "🌍 The Evil AI let out one last distorted scream as sparks flew from its core..."
+    );
     console.log("💥 You stood victorious, humanity watching with awe.");
-    console.log("🕊️ Peace has returned, at least for now... but legends say the AI might rise again.");
+    console.log(
+      "🕊️ Peace has returned, at least for now... but legends say the AI might rise again."
+    );
     console.log("👑 You are now a hero — the one who dared to challenge the code and won!");
-  } else if (computerScore > playerScore) {
+  } else if (cScore > pScore) {
     console.log("💀 The Evil AI wins! The machines rise...");
   } else {
     console.log("🤝 It's a tie! A temporary peace settles in.");
   }
 }
+
+function updateScores(resultStatus, scores) {
+  if (resultStatus === "win") {
+    scores.player = scores.player + 1;
+  } else if (resultStatus === "lose") {
+    scores.computer = scores.computer + 1;
+  }
+}
+
+async function game() {
+  printIntro();
+
+  const scores = { player: 0, computer: 0 };
+  let validRounds = 0;
+
+  while (validRounds < 5) {
+    const verdict = await getValidMoveFromUser();
+
+    if (verdict.kind === "surrender") {
+      printSurrenderMessage();
+      return;
+    }
+
+    if (verdict.kind === "branko") {
+      printBrankoScene();
+      return;
+    }
+
+    const playerMove = verdict.move;
+    const computerMove = getComputerMove();
+    const outcome = figureOutRound(playerMove, computerMove);
+
+    printRoundInfo(validRounds + 1, playerMove, computerMove, outcome.text);
+    updateScores(outcome.status, scores);
+
+    validRounds = validRounds + 1; // keeping it explicit
+  }
+
+  printFinalScores(scores.player, scores.computer);
+}
+
 
 game();
