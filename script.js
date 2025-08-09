@@ -83,7 +83,7 @@ async function game() {
     const computerInput = computerPlay();
     const result = playRound(playerInput, computerInput);
 
-    // mesaj pop-up către utilizator cu alegerea și rezultatul
+    
     alert(
       `🎮 Round ${roundsPlayed + 1}\n` +
       `🧍 You chose: ${capitalize(playerInput)}\n` +
