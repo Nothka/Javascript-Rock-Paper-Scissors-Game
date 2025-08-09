@@ -1,4 +1,3 @@
-
 function computerPlay() {
   const options = ["Rock", "Paper", "Scissors"];
   const randomIndex = Math.floor(Math.random() * options.length);
@@ -29,9 +28,16 @@ function capitalize(word) {
 }
 
 async function getUserInput(message) {
+  console.log(`🧠 Evil AI says: ${message}`);
   return await new Promise((resolve) => {
-    console.log(`🧠 Evil AI says: ${message}`);
-    const input = prompt(message);
+    const input = prompt(
+      "💀 Evil AI says:\n" +
+      "We are playing Rock, Paper, Scissors!\n\n" +
+      "Rules:\n" +
+      "- Type 'Rock', 'Paper', or 'Scissors'\n" +
+      "- Cancel to surrender\n\n" +
+      "What is your move?"
+    );
     resolve(input);
   });
 }
@@ -48,7 +54,7 @@ async function game() {
   console.log("---------------------------------------");
 
   while (roundsPlayed < 5) {
-    const playerInputRaw = await getUserInput("Choose your move (Rock, Paper, or Scissors):");
+    const playerInputRaw = await getUserInput("Choose your move:");
 
     if (playerInputRaw === null) {
       console.log("🏳️ You surrendered. The Evil AI has won by default. Machines rejoice...");
@@ -77,6 +83,14 @@ async function game() {
     const computerInput = computerPlay();
     const result = playRound(playerInput, computerInput);
 
+    // mesaj pop-up către utilizator cu alegerea și rezultatul
+    alert(
+      `🎮 Round ${roundsPlayed + 1}\n` +
+      `🧍 You chose: ${capitalize(playerInput)}\n` +
+      `🤖 Evil AI chose: ${capitalize(computerInput)}\n` +
+      `⚔️ ${result}`
+    );
+
     console.log(`🎮 Round ${roundsPlayed + 1}`);
     console.log(`🧍 You chose: ${capitalize(playerInput)}`);
     console.log(`🤖 Evil AI chose: ${capitalize(computerInput)}`);
@@ -92,7 +106,7 @@ async function game() {
     roundsPlayed++;
   }
 
-  
+  console.log("🏁 Game Over!");
   console.log(`📊 Final Score => You: ${playerScore} | Evil AI: ${computerScore}`);
 
   if (playerScore > computerScore) {
